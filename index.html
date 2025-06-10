@@ -30,6 +30,11 @@
                 <li><a href="#order">Lokasi & Pesan</a></li>
             </ul>
         </nav>
+        <div class="music-control" style="margin-right: 20px; cursor: pointer;" onclick="toggleMusic()">
+            <svg id="musicIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+        </div>
         <div class="hamburger-menu">
             <div class="bar"></div> <div class="bar"></div> <div class="bar"></div>
         </div>
@@ -165,7 +170,7 @@
             </div>
         </div>
     </section>
-   
+    
     <section id="order">
         <div class="container">
             <div class="text-content animated slide-in-left">
@@ -225,7 +230,7 @@
                         style="border:0; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" 
                         allowfullscreen="" 
                         loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
+                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
             </div>
@@ -315,6 +320,45 @@
             if (e.target === this) {
                 closeMenuPopup();
             }
+        });
+        
+        // --- Script untuk Kontrol Musik ---
+        let backgroundMusic = null;
+        let isMusicPlaying = false;
+
+        function initMusic() {
+            if (!backgroundMusic) {
+                backgroundMusic = new Audio('images/music.mp3');
+                backgroundMusic.loop = true;
+                backgroundMusic.volume = 0.5; // Set volume ke 50%
+            }
+        }
+
+        function toggleMusic() {
+            initMusic();
+            const musicIcon = document.getElementById('musicIcon');
+            
+            if (isMusicPlaying) {
+                backgroundMusic.pause();
+                musicIcon.innerHTML = '<path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>';
+            } else {
+                backgroundMusic.play();
+                musicIcon.innerHTML = '<path d="M6 6h12v12H6z"/>';
+            }
+            
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // Inisialisasi dan putar musik saat halaman dimuat
+        window.addEventListener('DOMContentLoaded', (event) => {
+            initMusic();
+            backgroundMusic.play().then(() => {
+                isMusicPlaying = true;
+                const musicIcon = document.getElementById('musicIcon');
+                musicIcon.innerHTML = '<path d="M6 6h12v12H6z"/>';
+            }).catch(error => {
+                console.log("Autoplay prevented:", error);
+            });
         });
     </script>
 
